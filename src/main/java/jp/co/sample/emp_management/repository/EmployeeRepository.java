@@ -82,6 +82,21 @@ public class EmployeeRepository {
 	}
 
 	/**
+	 * 
+	 * 従業員登録
+	 * 
+	 * @param employee
+	 */
+	public void insert(Employee employee) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
+		
+		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address, zip_code,address,telephone,salary,characteristics,dependents_count VALUES ((SELECT max(:id)+1 From employees), :name, :image,gender, :hire_date, :mail_address, :zip_code,address, :telephone, :salary, :characteristics, :dependents_count)";
+		
+		template.update(sql, param);
+		
+	}
+
+	/**
 	 * 主キーから従業員情報を取得します.
 	 * 
 	 * @param id 検索したい従業員ID
