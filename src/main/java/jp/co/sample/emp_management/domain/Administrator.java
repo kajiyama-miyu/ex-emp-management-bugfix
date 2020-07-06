@@ -1,17 +1,33 @@
 package jp.co.sample.emp_management.domain;
 
+
+import java.util.Collection;
+
+
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 /**
  * 管理者情報を表すドメイン.
  * 
  * @author igamasayuki
  * 
  */
-public class Administrator {
+
+@EntityScan
+public class Administrator implements UserDetails{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** id(主キー) */
 	private Integer id;
 	/** 名前 */
 	private String name;
 	/** メールアドレス */
+	
+	
 	private String mailAddress;
 	/** パスワード */
 	private String password;
@@ -78,5 +94,36 @@ public class Administrator {
 		return "Administrator [id=" + id + ", name=" + name + ", mailAddress=" + mailAddress + ", password=" + password
 				+ "]";
 	}
-
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities(){
+		return null;
+	}
+	
+	@Override 
+	public String getUsername() {
+		return this.mailAddress;
+	}
+	
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	
 }
