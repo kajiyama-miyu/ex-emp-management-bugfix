@@ -56,6 +56,30 @@ public class EmployeeRepository {
 
 		return developmentList;
 	}
+	
+	
+	/**
+	 * 
+	 * 従業員の名前を曖昧検索する。
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public List<Employee> findByEmployee(String name){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,image,gender,hire_date,mail_address, zip_code,address,telephone,salary,characteristics,dependents_count"); 
+		sql.append(" FROM employees");
+		sql.append(" WHERE name LIKE :name ORDER BY hire_date DESC");
+		
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		
+		
+		List<Employee> employeeList = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
+		
+		System.out.println(employeeList);
+		return employeeList;
+		
+	}
 
 	/**
 	 * 主キーから従業員情報を取得します.
