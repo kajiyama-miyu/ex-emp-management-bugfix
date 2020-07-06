@@ -1,6 +1,9 @@
 package jp.co.sample.emp_management.controller;
 
+
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +30,9 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	
+	@Autowired
+	private HttpSession session;
+	
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
 	 * 
@@ -48,8 +54,9 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showList")
 	public String showList(Model model) {
+//		Integer.parseInt("a");  500エラー発生させるために書いたもの。
 		List<Employee> employeeList = employeeService.showList();
-		model.addAttribute("employeeList", employeeList);
+		session.setAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
 
@@ -69,6 +76,28 @@ public class EmployeeController {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
 		model.addAttribute("employee", employee);
 		return "employee/detail";
+	}
+	
+	
+	@RequestMapping("/searchEmployees")
+	public String searchEmployees(String name, Model model) {
+		
+		List<Employee> employeeList = employeeService.showList();
+		if(name==null) {
+			session.setAttribute("employeeList", employeeList);
+			
+			return "employee/list";
+		}
+		
+		List<Employee> empList = employeeService.searchEmployees(name);
+		if(empList.size()==0) {
+			model.addAttribute("none", "１件もありませんでした");
+			session.setAttribute("employeeList", employeeList);
+		} else {
+			session.setAttribute("employeeList", empList);
+		}
+		
+		return "employee/list";
 	}
 	
 	/////////////////////////////////////////////////////
