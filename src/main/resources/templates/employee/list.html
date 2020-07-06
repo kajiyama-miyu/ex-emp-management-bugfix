@@ -61,7 +61,16 @@
 				class="table-responsive col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
 
 <!-- ここから上を編集する必要はありません -->
-
+<br>
+<form th:action="@{/employee/searchEmployees}" method="post" >
+<div th:if="${none}">
+<p th:text="${none}" style="color:red"></p>
+</div>
+従業員検索：<input type="text" name="name">
+<button>検索</button>
+</form>
+<br>
+<br>
 <!-- ここにモックのtable要素を貼り付けます -->
 
 				<table class="table table-striped">
@@ -73,7 +82,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="employee : ${employeeList}">
+						<tr th:each="employee : ${session.employeeList}">
 							<td>
 								<a href="detail.html" th:href="@{'/employee/showDetail?id=' + ${employee.id}}">
 									<span th:text="${employee.name}">山田太郎</span>
